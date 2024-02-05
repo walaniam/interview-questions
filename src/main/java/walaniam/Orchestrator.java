@@ -1,4 +1,4 @@
-package mariuszw;
+package walaniam;
 
 import java.util.concurrent.TimeoutException;
 
@@ -33,36 +33,42 @@ public class Orchestrator {
         return response;
     }
 
-    class OrchestratorRequest {
-        String serviceAQuery;
-        String serviceBQuery;
-        String serviceCQuery;
+    static class OrchestratorRequest {
+        final String serviceAQuery;
+        final String serviceBQuery;
+        final String serviceCQuery;
+
+        public OrchestratorRequest(String serviceAQuery, String serviceBQuery, String serviceCQuery) {
+            this.serviceAQuery = serviceAQuery;
+            this.serviceBQuery = serviceBQuery;
+            this.serviceCQuery = serviceCQuery;
+        }
     }
 
-    class OrchestratorResponse {
+    static class OrchestratorResponse {
         Resource_A resourceA;
         Resource_B resourceB;
         Resource_C resourceC;
     }
 
-    class Resource_A {
+    static class Resource_A {
     }
 
-    class Resource_B {
+    static class Resource_B {
     }
 
-    class Resource_C {
+    static class Resource_C {
     }
 
     interface Service_A {
-        Resource_A fetch(String query);
+        Resource_A fetch(String query) throws InterruptedException;
     }
 
     interface Service_B {
-        Resource_B fetch(String query);
+        Resource_B fetch(String query) throws InterruptedException;
     }
 
     interface Service_C {
-        Resource_C fetch(String query);
+        Resource_C fetch(String query) throws InterruptedException;
     }
 }
