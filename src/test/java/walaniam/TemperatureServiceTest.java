@@ -5,9 +5,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TemperatureServiceTest {
 
@@ -17,7 +19,8 @@ class TemperatureServiceTest {
         "50,150,400,500",
         "400,50,150,500",
         "150,400,50,500",
-        "100,200,200,500"
+        "100,200,200,500",
+        "100,3000,100,500"
     })
     void shouldGetAtLeastTwoResponsesInExpectedTime(int analogDelay, int digitalDelay, int infraredDelay, long responseTimeoutMs) {
 
@@ -32,6 +35,16 @@ class TemperatureServiceTest {
                     .isGreaterThanOrEqualTo(2)
                     .withFailMessage("Expected at least 2 non-null temperatures but got: " + snapshot);
             });
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "550,550,100",
+        "20,550,550"
+    })
+    void shouldThrowWhen500MsTimeoutExceeded(int analogDelay, int digitalDelay, int infraredDelay) {
+        final TemperatureService underTest = buildService(analogDelay, digitalDelay, infraredDelay);
+        assertThrows(TimeoutException.class, () -> underTest.readTemperature());
     }
 
     private static int getNotNullCount(TemperatureService.TemperatureSnapshot snapshot) {
