@@ -53,17 +53,25 @@ class TemperatureServiceTest {
     private TemperatureService buildService(int analogDelay, int digitalDelay, int infraredDelay) {
         return new TemperatureService(
             () -> {
-                Thread.sleep(analogDelay);
+                sleep(analogDelay);
                 return new BigDecimal(65);
             },
             (scale) -> {
-                Thread.sleep(digitalDelay);
+                sleep(digitalDelay);
                 return new BigDecimal("64.71");
             },
             () -> {
-                Thread.sleep(infraredDelay);
+                sleep(infraredDelay);
                 return new BigDecimal("65.15");
             }
         );
+    }
+
+    private static void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

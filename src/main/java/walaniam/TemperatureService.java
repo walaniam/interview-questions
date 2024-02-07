@@ -24,15 +24,10 @@ public class TemperatureService {
      * E.g. analog + digital or analog + infrared or digital + infrared is a minimum.
      */
     TemperatureSnapshot readTemperature() throws TimeoutException {
-        try {
-            BigDecimal analog = analogSensor.currentTemperatureCelcius();
-            BigDecimal digital = digitalSensor.currentTemperature(TemperatureScale.CELCIUS);
-            BigDecimal infrared = infraredSensor.currentTemperatureCelcius();
-            return new TemperatureSnapshot(analog, digital, infrared);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return new TemperatureSnapshot(null, null, null);
-        }
+        BigDecimal analog = analogSensor.currentTemperatureCelcius();
+        BigDecimal digital = digitalSensor.currentTemperature(TemperatureScale.CELCIUS);
+        BigDecimal infrared = infraredSensor.currentTemperatureCelcius();
+        return new TemperatureSnapshot(analog, digital, infrared);
     }
 
     static class TemperatureSnapshot {
@@ -58,11 +53,11 @@ public class TemperatureService {
     }
 
     interface AnalogThermometerSensor {
-        BigDecimal currentTemperatureCelcius() throws InterruptedException;
+        BigDecimal currentTemperatureCelcius();
     }
 
     interface DigitalThermometerSensor {
-        BigDecimal currentTemperature(TemperatureScale scale) throws InterruptedException;
+        BigDecimal currentTemperature(TemperatureScale scale);
     }
 
     enum TemperatureScale {
@@ -70,6 +65,6 @@ public class TemperatureService {
     }
 
     interface InfraredSensor {
-        BigDecimal currentTemperatureCelcius() throws InterruptedException;
+        BigDecimal currentTemperatureCelcius();
     }
 }
