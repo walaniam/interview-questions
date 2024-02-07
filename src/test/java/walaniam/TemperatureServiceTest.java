@@ -6,6 +6,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 class TemperatureServiceTest {
@@ -23,24 +24,30 @@ class TemperatureServiceTest {
         final TemperatureService underTest = buildService(analogDelay, digitalDelay, infraredDelay);
 
         await()
-            .pollInterval(10, TimeUnit.MILLISECONDS)
             .atMost(responseTimeoutMs, TimeUnit.MILLISECONDS)
-            .until(() -> {
-                TemperatureService.TemperatureSnapshot response = underTest.readTemperature();
-                int notNullCount = 0;
-                if (response != null) {
-                    if (response.analog != null) {
-                        notNullCount++;
-                    }
-                    if (response.digital != null) {
-                        notNullCount++;
-                    }
-                    if (response.infrared != null) {
-                        notNullCount++;
-                    }
-                }
-                return notNullCount >= 2;
+            .untilAsserted(() -> {
+                TemperatureService.TemperatureSnapshot snapshot = underTest.readTemperature();
+                int notNullCount = getNotNullCount(snapshot);
+                assertThat(notNullCount)
+                    .isGreaterThanOrEqualTo(2)
+                    .withFailMessage("Expected at least 2 non-null temperatures but got: " + snapshot);
             });
+    }
+
+    private static int getNotNullCount(TemperatureService.TemperatureSnapshot snapshot) {
+        int notNullCount = 0;
+        if (snapshot != null) {
+            if (snapshot.analog != null) {
+                notNullCount++;
+            }
+            if (snapshot.digital != null) {
+                notNullCount++;
+            }
+            if (snapshot.infrared != null) {
+                notNullCount++;
+            }
+        }
+        return notNullCount;
     }
 
     private TemperatureService buildService(int analogDelay, int digitalDelay, int infraredDelay) {
