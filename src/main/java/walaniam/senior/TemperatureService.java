@@ -1,4 +1,4 @@
-package walaniam;
+package walaniam.senior;
 
 import java.math.BigDecimal;
 import java.util.concurrent.TimeoutException;

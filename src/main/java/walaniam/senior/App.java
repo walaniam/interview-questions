@@ -1,4 +1,4 @@
-package walaniam;
+package walaniam.senior;
 
 /**
  * Hello world!
