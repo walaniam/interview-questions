@@ -3,30 +3,46 @@ package walaniam.senior;
 import java.math.BigDecimal;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * Service for providing {@linkplain TemperatureSnapshot}.
+ * Have a look at {@linkplain #readTemperature()} documentation for expected behaviour.
+ * Run TemperatureServiceTest to verify implementation.
+ */
 public class TemperatureService {
 
     private final AnalogThermometerSensor analogSensor;
     private final DigitalThermometerSensor digitalSensor;
     private final InfraredSensor infraredSensor;
 
-    public TemperatureService(AnalogThermometerSensor analogSensor, DigitalThermometerSensor digitalSensor,
-                              InfraredSensor infraredSensor) {
+    TemperatureService(AnalogThermometerSensor analogSensor, DigitalThermometerSensor digitalSensor,
+                       InfraredSensor infraredSensor) {
         this.analogSensor = analogSensor;
         this.digitalSensor = digitalSensor;
         this.infraredSensor = infraredSensor;
     }
 
     /**
-     * This method calls three underlying services to get temperature snapshot. It should return within 500ms, otherwise
-     * there's no point in waiting for the response and {@link TimeoutException} should be thrown.
-     * <p>
-     * TemperatureSnapshot should contain at least two internal responses but more is better.
-     * E.g. analog + digital or analog + infrared or digital + infrared is a minimum.
+     * This method calls three underlying services to get temperature snapshot.
+     *
+     * <b>Requirements</b>
+     * Execution of this method is considered valid when:
+     * <ul>
+     *     <li>in max of 500ms returns TemperatureSnapshot having at least two internal responses</li>
+     *     <li>throws TimeoutException when not able to collect at least two internal responses in 500ms</li>
+     * </ul>
+     * <b>Examples</b> of valid executions:
+     * <ul>
+     *     <li>in 500ms analog + digital</li>
+     *     <li>in 500ms analog + infrared</li>
+     *     <li>in 500ms digital + infrared</li>
+     *     <li>in 500ms analog + digital + infrared</li>
+     *     <li>when above 500ms TimeoutException</li>
+     * </ul>
      */
     TemperatureSnapshot readTemperature() throws TimeoutException {
-        BigDecimal analog = analogSensor.currentTemperatureCelcius();
+        BigDecimal analog = analogSensor.currentTemperatureCelsius();
         BigDecimal digital = digitalSensor.currentTemperature(TemperatureScale.CELCIUS);
-        BigDecimal infrared = infraredSensor.currentTemperatureCelcius();
+        BigDecimal infrared = infraredSensor.currentTemperatureCelsius();
         return new TemperatureSnapshot(analog, digital, infrared);
     }
 
@@ -53,7 +69,7 @@ public class TemperatureService {
     }
 
     interface AnalogThermometerSensor {
-        BigDecimal currentTemperatureCelcius();
+        BigDecimal currentTemperatureCelsius();
     }
 
     interface DigitalThermometerSensor {
@@ -65,6 +81,6 @@ public class TemperatureService {
     }
 
     interface InfraredSensor {
-        BigDecimal currentTemperatureCelcius();
+        BigDecimal currentTemperatureCelsius();
     }
 }
