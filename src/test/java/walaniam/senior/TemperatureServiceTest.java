@@ -11,6 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * This test verifies {@linkplain TemperatureService#readTemperature()} implementation.
+ */
 class TemperatureServiceTest {
 
     @ParameterizedTest
@@ -24,7 +27,7 @@ class TemperatureServiceTest {
     })
     void shouldGetAtLeastTwoResponsesInExpectedTime(int analogDelay, int digitalDelay, int infraredDelay, long responseTimeoutMs) {
 
-        final TemperatureService underTest = buildService(analogDelay, digitalDelay, infraredDelay);
+        final TemperatureService underTest = serviceWithMockSensors(analogDelay, digitalDelay, infraredDelay);
 
         await()
             .atMost(responseTimeoutMs, TimeUnit.MILLISECONDS)
@@ -43,8 +46,8 @@ class TemperatureServiceTest {
         "20,550,550"
     })
     void shouldThrowWhen500MsTimeoutExceeded(int analogDelay, int digitalDelay, int infraredDelay) {
-        final TemperatureService underTest = buildService(analogDelay, digitalDelay, infraredDelay);
-        assertThrows(TimeoutException.class, () -> underTest.readTemperature());
+        final TemperatureService underTest = serviceWithMockSensors(analogDelay, digitalDelay, infraredDelay);
+        assertThrows(TimeoutException.class, underTest::readTemperature);
     }
 
     private static int getNotNullCount(TemperatureService.TemperatureSnapshot snapshot) {
@@ -63,7 +66,7 @@ class TemperatureServiceTest {
         return notNullCount;
     }
 
-    private TemperatureService buildService(int analogDelay, int digitalDelay, int infraredDelay) {
+    private TemperatureService serviceWithMockSensors(int analogDelay, int digitalDelay, int infraredDelay) {
         return new TemperatureService(
             () -> {
                 sleep(analogDelay);
