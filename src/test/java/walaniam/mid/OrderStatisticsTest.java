@@ -1,11 +1,11 @@
-package walaniam.mid.orders;
+package walaniam.mid;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import walaniam.mid.orders.OrderSummaryTable.OrderSummaryRow;
+import walaniam.mid.OrderSummaryTable.OrderSummaryRow;
 
 class OrderStatisticsTest {
 

@@ -1,4 +1,4 @@
-package walaniam.mid.orders;
+package walaniam.mid;
 
 public enum OrderStatus {
     NEW,

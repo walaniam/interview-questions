@@ -1,4 +1,4 @@
-package walaniam.mid.orders;
+package walaniam.mid;
 
 import java.math.BigDecimal;
 import java.util.List;
