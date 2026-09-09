@@ -1,5 +1,6 @@
 package walaniam.senior;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -15,6 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * This test verifies {@linkplain TemperatureService#readTemperature()} implementation.
  */
 class TemperatureServiceTest {
+
+    @BeforeAll
+    static void warmUp() throws Exception {
+        // Pay JVM class-loading, JIT and executor/thread-pool startup costs once,
+        // so timing-sensitive parameterized cases below are not affected
+        // by cold-start overhead on slower machines (e.g. candidate laptops).
+        new TemperatureServiceTest()
+            .serviceWithMockSensors(0, 0, 0)
+            .readTemperature();
+    }
 
     @ParameterizedTest
     @CsvSource({
