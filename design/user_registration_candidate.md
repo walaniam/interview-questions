@@ -2,6 +2,8 @@
 
 **Format:** Whiteboard / draft. Focus on the design, not on production-ready code.
 
+Assume standard auth exists; focus on resource design.
+
 ## Goal
 
 Design the **REST API** and **data model** for a user registration system that
@@ -22,9 +24,9 @@ resources, relationships, endpoints, and the underlying data model.
    When registering, a user may optionally also register their child.
 
 3. **Link an already-registered child.**
-   When a spouse (a second parent) registers, they should be able to link a
-   child who is **already registered** in the system, rather than creating a
-   duplicate.
+   When a spouse (a second parent in the same family; a family has one or two
+   parents) registers, they should be able to link a child who is **already
+   registered** in the system, rather than creating a duplicate.
 
 4. **Unlink when the child becomes an adult.**
    When a child reaches adulthood, the (now adult) child should be able to
