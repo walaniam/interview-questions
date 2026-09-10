@@ -8,7 +8,10 @@ same-package JUnit 5 test that defines its contract. There are no shared
 application layers or integration points between the exercises.
 
 When solving an exercise, treat its test as the source of truth; Javadoc on the
-production entry point supplies additional requirements.
+production entry point supplies additional requirements. Each exercise also
+has a `README.md` next to its production class
+(`src/main/java/walaniam/{junior,mid,senior}/README.md`) — read it before
+implementing.
 
 ## Build & test
 
