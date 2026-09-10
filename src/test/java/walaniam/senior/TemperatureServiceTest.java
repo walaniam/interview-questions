@@ -1,6 +1,7 @@
 package walaniam.senior;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -27,9 +28,13 @@ class TemperatureServiceTest {
             .readTemperature();
     }
 
+    @Test
+    void shouldGetAtLeastTwoResponsesInExpectedTime_passingNow() {
+        assertAtLeastTwoResponsesWithin(100, 100, 100, 500);
+    }
+
     @ParameterizedTest
     @CsvSource({
-        "100,100,100,500",
         "50,150,400,500",
         "400,50,150,500",
         "150,400,50,500",
@@ -37,6 +42,10 @@ class TemperatureServiceTest {
         "100,3000,100,500"
     })
     void shouldGetAtLeastTwoResponsesInExpectedTime(int analogDelay, int digitalDelay, int infraredDelay, long responseTimeoutMs) {
+        assertAtLeastTwoResponsesWithin(analogDelay, digitalDelay, infraredDelay, responseTimeoutMs);
+    }
+
+    private void assertAtLeastTwoResponsesWithin(int analogDelay, int digitalDelay, int infraredDelay, long responseTimeoutMs) {
 
         final TemperatureService underTest = serviceWithMockSensors(analogDelay, digitalDelay, infraredDelay);
 

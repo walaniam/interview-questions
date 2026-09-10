@@ -28,4 +28,4 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -B verify -Dtest='TemperatureServiceTest#shouldGetAtLeastTwoResponsesInExpectedTime[1]' -DfailIfNoTests=false --file pom.xml
+      run: mvn -B verify -Dtest='TemperatureServiceTest#shouldGetAtLeastTwoResponsesInExpectedTime_passingNow' -DfailIfNoTests=true --file pom.xml
